@@ -5,6 +5,7 @@ import { Button } from './components/ui/button';
 import DeviceManagement from './pages/DeviceManagement';
 import RealTimeDashboard from './pages/RealTimeDashboard';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import UserRegistration from './pages/UserRegistration';
 
 function renderError({ error }: FallbackProps) {
 	return <LoadingOrError error={error} />;
@@ -18,6 +19,7 @@ export function App() {
 					<Routes>
 						<Route path="/" element={<DeviceManagement />} />
 						<Route path="/dashboard" element={<RealTimeDashboard />} />
+						<Route path="/auth" element={<UserRegistration />} />
 					</Routes>
 				</Router>
 			</Suspense>

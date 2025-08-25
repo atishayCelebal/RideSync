@@ -1,24 +1,29 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.LocationData;
+import com.example.demo.service.LocationDataService;
+import com.example.demo.dto.LocationDataRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/devices")
+@RequestMapping("/api/locations")
 public class LocationDataController {
 
-    @PostMapping("/data")
+    private final LocationDataService locationDataService;
+
+    public LocationDataController(LocationDataService locationDataService) {
+        this.locationDataService = locationDataService;
+    }
+
+    @PostMapping
     public ResponseEntity<String> ingestLocationData(@RequestBody LocationDataRequest request) {
-        // Logic for ingesting location data
+        LocationData locationData = new LocationData();
+        locationData.setDeviceId(request.getDeviceId());
+        locationData.setLatitude(request.getLatitude());
+        locationData.setLongitude(request.getLongitude());
+        locationData.setTimestamp(request.getTimestamp());
+        locationDataService.ingestLocationData(locationData);
         return ResponseEntity.ok("Location data ingested successfully");
     }
-}
-
-class LocationDataRequest {
-    private String deviceId;
-    private double latitude;
-    private double longitude;
-    private String timestamp;
-
-    // Getters and Setters
 }

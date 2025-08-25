@@ -1,12 +1,29 @@
-package com.example.demo.dto;
+package com.example.demo.model;
 
-public class LocationDataRequest {
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "location_data")
+public class LocationData {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String deviceId;
     private double latitude;
     private double longitude;
     private String timestamp;
 
     // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getDeviceId() {
         return deviceId;
     }

@@ -1,0 +1,3 @@
+spring:
+  main:
+    main-class: com.example.demo.DemoApplication

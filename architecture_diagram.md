@@ -1,0 +1,11 @@
+graph TD;
+    A[User Interface] -->|Interacts with| B[Backend API];
+    B -->|Fetches Data| C[Database];
+    B -->|Streams Location Data| D[Kafka];
+    D -->|Processes Data| E[Real-Time Processing];
+    E -->|Sends Updates| A;
+    A -->|WebSocket Connection| B;
+    A -->|Displays Map| F[Google Maps Integration];
+    F -->|Updates Markers| A;
+    B -->|Sends Alerts| G[Anomaly Detection];
+    G -->|Notifies Admin| A;

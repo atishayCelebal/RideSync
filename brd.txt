@@ -1,0 +1,101 @@
+Business Requirements Document (BRD) - Revised
+Project Name: RideSync - Intelligent Group Ride & Fleet Tracking Platform
+
+Author: Business Analyst Team
+
+Version: 1.1
+
+Date: August 22, 2025
+
+Location: Jaipur, Rajasthan, India
+
+1. Introduction
+1.1 Purpose
+This document outlines the business requirements for RideSync, a new web-based platform designed to enhance the safety and coordination of group vehicle rides. The platform will not only provide a real-time, map-based dashboard but also leverage Artificial Intelligence to proactively detect and alert group leaders to anomalous rider behavior, enhancing the safety and security of every trip.
+
+1.2 Project Scope
+In-Scope:
+
+A React And Java-based web application for user and group management.
+
+A secure API endpoint for ingesting location data from GPS devices.
+
+A real-time data pipeline using Confluent to process location streams.
+
+A Java-based backend to manage business logic.
+
+A real-time dashboard with Google Maps integration, updated via WebSockets.
+
+Management of GPS devices within the platform.
+
+Historical route playback or trip analytics.
+
+1.3 Business Problem / Opportunity
+The core problem remains: coordinating groups of vehicles, whether for a scenic drive from Jaipur or for commercial fleet operations, is challenging. This revised architecture addresses the need for a more reliable and "always-on" tracking solution that doesn't depend on users' mobile phones. It provides a centralized command center for ride leaders or fleet managers to monitor all assets in real-time.
+
+1.4 Target Audience
+Motorcycle and car enthusiast clubs for organized rides.
+
+Tour operators managing vehicle fleets.
+
+Small-scale logistics and delivery companies.
+
+Event organizers coordinating vehicle movements.
+
+2. Business Requirements
+2.1 Functional Requirements
+Req. ID	Requirement Category	Description
+FR-001	User & Group Management	A user must be able to register an account and create a "Ride Group" via the web application. The creator is the "Group Admin."
+FR-002		The Group Admin can invite other users to their group via email.
+FR-003	Device Management	The system must provide a secure API endpoint for registered GPS hardware devices to stream location data (latitude, longitude, timestamp, device ID).
+FR-004		A Group Admin must be able to register their GPS device IDs in the web application and associate them with a user or vehicle within their group.
+FR-005	Data Ingestion & Processing	The backend system must ingest the real-time location data streams from the GPS devices into a Confluent topic for processing.
+FR-006		The Java backend will consume the location data from Kafka, validate it against registered devices and active ride sessions, and prepare it for frontend delivery.
+FR-007	Real-Time Map Dashboard	The React web application's main dashboard must feature an integrated Google Map.
+FR-008		When a "Ride Session" is active, the dashboard must establish a persistent WebSocket connection to the backend.
+FR-009		The map must display and update markers for the real-time location of every member in the active Ride Session as data is pushed from the backend via WebSockets.
+FR-010	Ride Session Control	The Group Admin can start and end a "Ride Session" from the web dashboard. Location data is only processed and displayed to group members during an active session.
+FR-011	AI-Powered Anomaly Detection	The system must continuously analyze real-time location data streams during an active Ride Session to identify anomalous behavior.
+FR-012		Anomalies to be detected in V1.0 include: <br>- A group member remaining stationary for a configurable period (e.g., > 3 minutes) while the rest of the group is in motion. <br>- A group member's direction of travel significantly deviating from the main group's path.
+FR-013		Upon detecting an anomaly, the system must automatically generate a clear, concise alert and send it to the Group Admin's dashboard in real-time.
+FR-014		The generated alert message should be in natural language, specifying the member's name and the nature of the anomaly (e.g., "Alert: [Rider Name] has been stationary for 5 minutes.").
+
+2.2 Non-Functional Requirements (NFRs)
+Req. ID	Requirement Category	Description
+NFR-001	Security & Privacy	Critical: A user's location data is only visible to members of their specific group and only during an active Ride Session. The API endpoint for GPS devices must be secured (e.g., via API keys or device-specific tokens).
+NFR-002	Data Pipeline	The system must use a resilient, scalable streaming platform Confluent to handle high-volume, real-time location data ingestion. This ensures decoupling between the data producers (GPS devices) and consumers (backend services).
+NFR-003	Real-Time UI	The communication between the Java backend and the React frontend for location updates must be achieved using a low-latency, real-time protocol like WebSockets.
+NFR-004	Performance	The end-to-end latency from GPS device transmission to map marker update on the web dashboard should be under 5 seconds under normal network conditions.
+NFR-005	Scalability	The architecture must be able to scale the data ingestion and processing layers independently to handle thousands of concurrently tracked devices.
+NFR-006	Availability	The entire system (API endpoint, Kafka cluster, backend services, web app) shall maintain an uptime of 99.5% or higher.
+NFR-007	AI Model Performance	The anomaly detection model must process location data and trigger an alert within 30 seconds of the anomaly condition being met.
+NFR-008		The system must have a low false-positive rate for alerts (e.g., not triggering an alert for brief stops at traffic lights). The initial model should be tuned to prioritize avoiding false alarms.
+
+3. User Roles and Permissions
+(This section remains largely unchanged from the previous version)
+
+Role	Description	Permissions
+Group Admin	The manager of a specific Ride Group.	- Create/manage the group.<br>- Register and assign GPS devices.<br>- Start/end Ride Sessions.<br>- Invite/remove members.<br>- View all member locations during a ride.
+Group Member	A standard user in a Ride Group.	- Join a group.<br>- View the real-time location of all other members during an active Ride Session.
+
+Export to Sheets
+4. Assumptions and Constraints
+4.1 Assumptions
+Users will access the application via a modern web browser on a desktop, laptop, or tablet.
+
+The third-party GPS tracking devices are capable of making authenticated HTTP requests to the RideSync ingestion API.
+
+The GPS devices will be pre-configured by the users with the necessary API endpoint and credentials provided by the RideSync platform.
+
+4.2 Constraints
+The technology stack is fixed and must be implemented as follows:
+
+Backend: Java 17+, Spring Boot, Sockets for real time communication, Docker(Containers).
+
+Frontend: React
+
+Data Streaming: Confluent Cloud
+
+Real-time Push: WebSockets to frontend
+
+DB: PGSQL

@@ -26,9 +26,15 @@ public class VehicleController {
     @PostMapping
     public ResponseEntity<ApiResponse<VehicleDtos.VehicleResponse>> upsert(@Valid @RequestBody VehicleDtos.UpsertRequest request,
                                                                            Principal principal) {
-        User owner = userService.findByUsername(principal.getName()).orElseThrow();
-        Vehicle vehicle = vehicleService.upsert(owner, request);
-        return ResponseEntity.ok(ApiResponse.ok("Vehicle saved.", vehicleMapper.toResponse(vehicle)));
+        try {
+            User owner = userService.findByUsername(principal.getName())
+                    .orElseThrow(() -> new IllegalArgumentException("User not found: " + principal.getName()));
+            
+            Vehicle vehicle = vehicleService.upsert(owner, request);
+            return ResponseEntity.ok(ApiResponse.ok("Vehicle saved successfully.", vehicleMapper.toResponse(vehicle)));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.fail("Failed to save vehicle: " + e.getMessage()));
+        }
     }
 
     @GetMapping("/me")

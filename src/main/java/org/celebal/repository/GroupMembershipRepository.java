@@ -15,6 +15,7 @@ public interface GroupMembershipRepository extends JpaRepository<GroupMembership
     List<GroupMembership> findByGroup(Group group);
     List<GroupMembership> findByUser(User user);
     List<GroupMembership> findByGroupAndStatus(Group group, MembershipStatus status);
+    List<GroupMembership> findByGroupGroupIdAndStatus(UUID groupId, MembershipStatus status);
 }
 
 

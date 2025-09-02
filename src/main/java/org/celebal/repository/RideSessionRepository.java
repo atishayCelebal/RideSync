@@ -12,6 +12,7 @@ import java.util.UUID;
 public interface RideSessionRepository extends JpaRepository<RideSession, UUID> {
     List<RideSession> findByGroup(Group group);
     Optional<RideSession> findFirstByGroupAndStatusOrderByRideStartDesc(Group group, RideSessionStatus status);
+    List<RideSession> findByStatus(RideSessionStatus status);
 }
 
 

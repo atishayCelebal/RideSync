@@ -1,0 +1,1 @@
+﻿-- Drop FK to vehicles to allow mapping without Vehicle row\nALTER TABLE vehicle_smartcar_mapping DROP CONSTRAINT IF EXISTS fk_vehicle_smartcar_mapping_vehicle;\n
